@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'settings_screen.dart';
 import 'constants.dart';
 import 'calibration_screen.dart';
 
 class ResultScreen extends StatefulWidget {
-  final double baseline;   // baseline from Calibration Screen
+  final double baseline;
 
   const ResultScreen({super.key, required this.baseline});
 
@@ -16,11 +17,12 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
-  double _bac = 0.0;   // result in promile
-  double _voltage = 0.0;   // voltage from sensor
-  bool _isLoading = true;  // true - blow into sensor
-  bool _hasError = false;  // true - show an error
+  double _bac = 0.0;
+  double _voltage = 0.0;
+  bool _isLoading = true;
+  bool _hasError = false;
   String _errorMessage = '';
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -28,21 +30,33 @@ class _ResultScreenState extends State<ResultScreen> {
     _takeMeasurement();
   }
 
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
   Future<void> _takeMeasurement() async {
-    // Give the user 3 seconds to start blowing.
+    // Give the user 3 seconds to start blowing
     await Future.delayed(const Duration(seconds: 3));
     try {
       final response = await http
           .get(Uri.parse(rpiUrl))
           .timeout(const Duration(seconds: 3));
-      // If no answer during 3 sec
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         _voltage = (data['voltage'] as num).toDouble();
         _bac = _voltageToBac(_voltage);
         setState(() => _isLoading = false);
+
+        // Play sound based on result
+        if (_bac > _limit && _hoursToSober > 4) {
+          await _audioPlayer.play(AssetSource(soundRed));
+        }
       }
     } catch (_) {
+      await _audioPlayer.play(AssetSource(soundError));
       setState(() {
         _hasError = true;
         _isLoading = false;
@@ -50,24 +64,27 @@ class _ResultScreenState extends State<ResultScreen> {
       });
     }
   }
+
   // Logic for converting voltage to promile
   double _voltageToBac(double voltage) {
     if (voltage < widget.baseline + 0.15) return 0.0;
-    final ratio =
-        (voltage - widget.baseline) / (3.8 - widget.baseline);
+    final ratio = (voltage - widget.baseline) / (3.8 - widget.baseline);
     double bac = ratio * 2.0;
     // Widmark gender adjustment
     if (UserSettings.isMale) bac = bac * 0.55 / 0.68;
     return double.parse(bac.toStringAsFixed(3));
   }
-  // Limit if person is prof.driver or not
+
+  // Limit depending on driver type
   double get _limit => UserSettings.isPro ? 0.0 : 0.4;
-  // Time to sobriety.
+
+  // Time to sobriety
   double get _hoursToSober {
     if (_bac <= _limit) return 0;
     return (_bac - _limit) / 0.15;
   }
-  // Color depending of result
+
+  // Color depending on result
   Color get _statusColor {
     if (_bac <= _limit) return Colors.green;
     if (_hoursToSober <= 4) return Colors.orange;
@@ -96,9 +113,7 @@ class _ResultScreenState extends State<ResultScreen> {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Background logo
           backgroundLogo(),
-
           SafeArea(
             child: Column(
               children: [
@@ -114,7 +129,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => const SettingsScreen()),
+                              builder: (_) => SettingsScreen()),
                         );
                       },
                     ),
@@ -122,6 +137,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 ),
 
                 const Spacer(),
+
                 // 3 states of screen
                 if (_hasError) ...[
                   const Icon(Icons.error_outline,
@@ -145,15 +161,15 @@ class _ResultScreenState extends State<ResultScreen> {
                     child: const Text('Try Again'),
                   ),
                 ] else if (_isLoading) ...[
-                  // Blow screen
-                  const SizedBox(height: 32),
                   const Text('Blow into the sensor',
                       style: TextStyle(
                           fontSize: 28, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  const Text('Keep sensor 2 cm away',
+                      style: TextStyle(color: Colors.grey, fontSize: 14)),
                   const SizedBox(height: 24),
                   const CircularProgressIndicator(color: Colors.black),
                 ] else ...[
-                  // Result
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Container(
@@ -191,7 +207,6 @@ class _ResultScreenState extends State<ResultScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  // Test Again button
                   TextButton.icon(
                     onPressed: () => Navigator.pushReplacement(
                       context,

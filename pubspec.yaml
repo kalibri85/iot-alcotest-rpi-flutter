@@ -62,6 +62,8 @@ flutter:
     - assets/images/alcotesterLogo.png
     - assets/images/alcotesterLogoDark.png
     - assets/sounds/READY.mp3
+    - assets/sounds/RED.mp3
+    - assets/sounds/ERROR.mp3
 
   # To add assets to your application, add an assets section, like this:
   # assets:

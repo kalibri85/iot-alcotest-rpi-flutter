@@ -56,6 +56,7 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
 
           if (voltage >= 3.0) {
             timer.cancel();
+            await _audioPlayer.play(AssetSource(soundError));
             setState(() {
               _hasError = true;
               _errorMessage =
