@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'settings_screen.dart';
 
 void main() {
   runApp(const AlcotestApp());
@@ -47,7 +48,10 @@ class MainScreen extends StatelessWidget {
                   icon: const Icon(Icons.settings,
                       color: Colors.black, size: 28),
                   onPressed: () {
-                    // Settings
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => SettingsScreen()),
+                    );
                   },
                 ),
               ),
