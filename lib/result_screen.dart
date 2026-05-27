@@ -207,16 +207,20 @@ class _ResultScreenState extends State<ResultScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  TextButton.icon(
+                  ElevatedButton.icon(
                     onPressed: () => Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (_) => const CalibrationScreen()),
                     ),
-                    icon: const Icon(Icons.refresh, color: Colors.black54),
+                    icon: const Icon(Icons.refresh),
                     label: const Text('Test again',
-                        style: TextStyle(
-                            color: Colors.black54, fontSize: 16)),
+                        style: TextStyle(fontSize: 16)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(200, 50),
+                    )
                   ),
                 ],
 
