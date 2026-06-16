@@ -19,11 +19,11 @@ def voltage_to_bac(voltage):
 
     return round(bac, 3)
     
-print ("Alkotestr zapushen dujte v sensor")
+print ("Blow into the sensor")
 print("-" * 40)
 
 while True:
     voltage = chan.voltage
     bac = voltage_to_bac(voltage)
-    print(f"napriazenije: {voltage:.3f}V | BAC: {bac} ")
+    print(f"Voltage: {voltage:.3f}V | BAC: {bac} ")
     time.sleep(1)
