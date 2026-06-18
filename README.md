@@ -1,5 +1,5 @@
 # IoT Breathalyzer with Mobile Application
-![Product Vision](screenshots/mokPHAL.png)
+<img src="screenshots/mokPHAL.png" width="400">
 The IoT project that estimates Blood Alcohol Concentration (BAC) 
 using a Raspberry Pi 5 and MQ-3 alcohol sensor, with results displayed 
 in a Flutter mobile app.
