@@ -14,7 +14,7 @@ in a Flutter mobile app.
    
    MQ-3 → ADS1115 → Raspberry Pi 5 → Wi-Fi → Flutter App
 ## Hardware required
-![Hardware setup](screenshots/myProject.jpg)
+<img src="screenshots/myProject.jpg" width="400">
 - Raspberry Pi 5
 - MQ-3 alcohol sensor module
 - DFRobot Gravity ADS1115 16-bit ADC
