@@ -1,12 +1,12 @@
 # IoT Breathalyzer with Mobile Application
-
+![Product Vision](screenshots/mokPHAL.png)
 The IoT project that estimates Blood Alcohol Concentration (BAC) 
 using a Raspberry Pi 5 and MQ-3 alcohol sensor, with results displayed 
 in a Flutter mobile app.
 
 
 ## How it works
-
+![Mobile app](screenshots/allST.jpg)
 1. The MQ-3 sensor detects alcohol in exhaled breath
 2. The ADS1115 ADC converts the analog signal to digital
 3. A Python Flask server on the Raspberry Pi serves the data via Wi-Fi
@@ -14,7 +14,7 @@ in a Flutter mobile app.
    
    MQ-3 → ADS1115 → Raspberry Pi 5 → Wi-Fi → Flutter App
 ## Hardware required
-
+![Hardware setup](screenshots/myProject.jpg)
 - Raspberry Pi 5
 - MQ-3 alcohol sensor module
 - DFRobot Gravity ADS1115 16-bit ADC
