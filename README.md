@@ -1,5 +1,3 @@
-# alcotest_app
-
 # IoT Breathalyzer with Mobile Application
 
 The IoT project that estimates Blood Alcohol Concentration (BAC) 
