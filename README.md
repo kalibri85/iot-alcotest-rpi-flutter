@@ -135,13 +135,13 @@ sudo nmcli dev wifi connect "AlcotestDemo" password "yourpassword"
 
 3. Assign a static IP to avoid changes between sessions:
 ```bash
-sudo nmcli con mod "AlcotestDemo" ipv4.addresses 192.168.55.100/24 ipv4.gateway 192.168.55.1 ipv4.method manual
+sudo nmcli con mod "AlcotestDemo" ipv4.addresses 192.168.117.100/24 ipv4.gateway 192.168.117.1 ipv4.method manual
 sudo nmcli con up "AlcotestDemo"
 ```
 
 4. Update `lib/constants.dart` with the static IP:
 ```dart
-const String rpiUrl = 'http://192.168.55.100:5000/bac';
+const String rpiUrl = 'http://192.168.117.100:5000/bac';
 ```
 
 > ⚠️ Never forget the network on Raspberry Pi — 
